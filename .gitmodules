@@ -1,3 +1,3 @@
-[submodule "NextLat/NextLat"]
-	path = NextLat/NextLat
+[submodule "nextlat/NextLat"]
+	path = nextlat/NextLat
 	url = https://github.com/JaydenTeoh/NextLat
