@@ -1,0 +1,75 @@
+use_mtp_gloeckle: true
+
+trainer:
+  # 10B tokens / (512 * 1024) ~= 19074 updates
+  train_batches: 19074
+  val_batches: 20
+  val_only: false
+  val_printsamples: false
+  log_interval: 10
+  val_interval: 200
+  test_interval: 200
+  save_last_checkpoint: false
+  save_best_checkpoint: false
+  always_save_checkpoint: false
+  save_recovery_checkpoint: -1
+  keep_checkpoint_steps: [19075]
+  out_dir: output/nextlat-finewebedu-100M
+  init_from: scratch
+  log_to_file: true
+  log_to_wandb: true
+  wandb_project: fineweb-100M
+  compile: true
+  use_fused_kernels: true
+  garbage_collect: -1
+  print_samples: false
+  sampling_mode: AR
+  experiment_name: Gloeckle-100M
+  # Optional in-training speculative eval
+  spec_eval_enabled: true
+  spec_eval_num_samples: 16
+  spec_eval_prompt_tokens: 128
+  spec_eval_max_new_tokens: 128
+  spec_eval_gamma: 4
+  spec_eval_top_k: 1
+  spec_eval_temperature: 1.0
+
+data:
+  dataset: finewebedu
+  # tokens/update = effective_batch_size * block_size = 512 * 1024 = 524,288
+  effective_batch_size: 512
+  gradient_accum_steps: 2
+  pair_batch_size: 32768
+  num_workers: 0
+  fineweb_data_path: "data/fineweb/pretokenized-10BT"
+  # For 1B pretokenized total tokens: 1 val shard (100M) + ~9 train shards (900M)
+  num_train_files: 9
+
+model:
+  # ~100M-class NextLat backbone
+  n_layer: 12
+  n_head: 12
+  n_embd: 768
+  dropout: 0.0
+  bias: false
+  vocab_size: 0 # will be overwritten by datamodule
+  block_size: 1024
+  context_length: 0
+  gpt_mode: next_token
+  mtp_horizon: 2
+  mtp_lambda: 1.0
+
+optimizer:
+  learning_rate: 0.01
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: 1.0
+  optimizer_type: muon
+  # adjust_lr_fn: match_rms_adamw
+
+lr_scheduler:
+  warmup_iters: 200
+  warmdown_iters: 2000
+
+seed: 1234

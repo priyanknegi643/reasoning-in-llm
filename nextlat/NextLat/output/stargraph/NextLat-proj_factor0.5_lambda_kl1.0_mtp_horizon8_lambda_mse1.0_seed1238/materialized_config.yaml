@@ -1,0 +1,95 @@
+use_bst: false
+use_nextlat: true
+use_mtp_gloeckle: false
+use_mtp_jtp: false
+seed: 1238
+trainer:
+  train_batches: 20000
+  val_batches: 200
+  val_only: false
+  log_interval: 1
+  val_interval: 1000
+  save_last_checkpoint: false
+  save_best_checkpoint: false
+  always_save_checkpoint: false
+  save_recovery_checkpoint: -1
+  keep_checkpoint_steps: []
+  out_dir: output/stargraph
+  init_from: scratch
+  log_to_file: true
+  log_to_wandb: false
+  wandb_project: stargraph
+  deterministic: false
+  compile: false
+  use_fused_kernels: false
+  garbage_collect: -1
+  sampling_mode: AR
+  speculative_gamma: 4
+  top_p: null
+  train_probe: false
+  wandb_tags:
+  - '2_10'
+  epochs: -1
+  test_batches: 200
+  val_printsamples: false
+  test_interval: 1000
+  experiment_name: NextLat-proj_factor0.5_lambda_kl1.0_mtp_horizon8_lambda_mse1.0_seed1238
+data:
+  dataset: stargraph
+  effective_batch_size: 512
+  gradient_accum_steps: 1
+  pair_batch_size: 32768
+  num_workers: 0
+  goal_range:
+  - 25
+  - 75
+  tokenizer_name_or_path: ''
+  tokenizer_eos_id: -1
+  stargraph_data_path: ''
+  stargraph_max_nodes: 100
+  pair_accum_steps: 1
+  stargraph_train_data_path: data/stargraph/graph_2_10_sample_200000.txt
+  stargraph_test_data_path: data/stargraph/graph_2_10_test_20000.txt
+  test_generalization: false
+  stargraph_generalization_data_path:
+  - data/stargraph/graph_7_5_sample_20000.txt
+  - data/stargraph/graph_5_5_test_20000.txt
+  - data/stargraph/graph_10_5_sample_1000000.txt
+  - data/stargraph/graph_6_6_sample_1000000.txt
+  - data/stargraph/graph_7_7_test_20000.txt
+  device_batch_size: 512
+  micro_batch_size: 512
+model:
+  n_layer: 12
+  n_head: 6
+  n_embd: 384
+  dropout: 0.0
+  bias: false
+  vocab_size: 106
+  block_size: 68
+  context_length: 56
+  bst_pair_minimum_gap: 1
+  bst_pair_maximum_gap: -1
+  bst_pair_subsample_rate: 1.0
+  bst_single_gap_prediction_mode: eos
+  gpt_mode: next_token
+  compute_hidden_state_rank: false
+  lambda_kl: 1.0
+  lambda_mse: 1.0
+  lambda_ce: 0.0
+  mtp_horizon: 8
+  proj_factor: 0.5
+optimizer:
+  optimizer_type: adam
+  mu: 0.95
+  nesterov: true
+  learning_rate: 0.0005
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: 100
+  adjust_lr_fn: null
+lr_scheduler:
+  schedule: constant
+  warmup_iters: 0
+  warmdown_iters: 0

@@ -1,0 +1,17 @@
+torch>=2.6.0
+transformers
+datasets==4.6.1 # for speculative decoding datasets
+omegaconf>=2.3.0
+wandb
+trl
+scikit-learn
+lightning
+lm_eval
+boto3
+
+# for manhattan
+osmnx==1.9.3
+networkx==3.3
+folium==0.16.0
+selenium
+gdown

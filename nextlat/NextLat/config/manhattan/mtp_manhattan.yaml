@@ -1,0 +1,56 @@
+use_mtp_gloeckle: true
+
+trainer:
+  epochs: -1
+  train_batches: 400000
+  val_batches: -1
+  test_batches: -1
+  val_only: false
+  val_printsamples: false
+  log_interval: 1
+  val_interval: 1000
+  test_interval: 1000
+  out_dir: output/manhattan
+  init_from: scratch
+  wandb_project: manhattan
+  compile: true
+  save_last_checkpoint: True
+  always_save_checkpoint: false
+  save_recovery_checkpoint: -1
+  experiment_name: Gloeckle
+data:
+  dataset: manhattan
+  effective_batch_size: 256
+  gradient_accum_steps: 1
+  pair_accum_steps: 1
+  num_workers: 0
+  test_generalization: true
+  generalization_num_samples: 20
+  data_path: "data/manhattan/random_walks"
+  use_pretokenized: true
+
+model:
+  n_layer: 48
+  n_head: 8
+  n_embd: 384
+  dropout: 0.0
+  bias: false
+  vocab_size: 0 #will be overwritten by datamodule
+  block_size: 256
+  context_length: 0
+  gpt_mode: next_token
+  mtp_horizon: 8
+  mtp_lambda: 1.0
+
+optimizer:
+  optimizer_type: adam
+  learning_rate: 1e-4
+  weight_decay: 0.01
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: null
+
+lr_scheduler:
+  warmup_iters: 0
+  warmdown_iters: 0
+seed: 1234

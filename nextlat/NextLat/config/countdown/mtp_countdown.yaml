@@ -1,0 +1,61 @@
+use_mtp_gloeckle: true
+
+trainer:
+  epochs: -1
+  train_batches: 100000
+  val_batches: -1
+  test_batches: -1
+  val_only: false
+  val_printsamples: false
+  log_interval: 1
+  val_interval: 1000
+  test_interval: 1000
+  out_dir: output/countdown
+  init_from: scratch
+  wandb_project: countdown
+  compile: true
+  save_last_checkpoint: false
+  save_best_checkpoint: false
+  experiment_name: Gloeckle
+data:
+  dataset: countdown
+  effective_batch_size: 1024
+  gradient_accum_steps: 1
+  pair_accum_steps: 1
+  num_workers: 0
+  countdown_max_intermediate: 10000
+  num_equations: 3 # number of input tokens - 1
+  num_pause_tokens: 8
+  train_countdown_data_path: "data/countdown/train1_b4_t100_n500000.txt"
+  val_countdown_data_path: "data/countdown/val1_b4_t100_n500000.txt"
+  test_generalization: true
+  generalization_countdown_data_path: "data/countdown/val_target1_b4_t100_n500000.txt"
+
+model:
+  n_layer: 12
+  n_head: 12
+  n_embd: 768
+  dropout: 0.0
+  bias: false
+  vocab_size: 0 #will be overwritten by datamodule
+  block_size: 1024
+  context_length: 0
+  gpt_mode: next_token
+  mtp_horizon: 8
+  mtp_lambda: 1.0
+
+optimizer:
+  optimizer_type: adam
+  learning_rate: 3e-4
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: 1
+
+lr_scheduler:
+  warmup_iters: 0
+  warmdown_iters: 0
+sweep:
+  - seed: [1234, 1235, 1236]
+    model:
+      mtp_horizon: [1, 4, 8]

@@ -1,0 +1,56 @@
+use_bst: true
+
+trainer:
+  epochs: -1
+  train_batches: 100000
+  val_batches: -1
+  test_batches: -1
+  val_only: false
+  val_printsamples: false
+  log_interval: 1
+  val_interval: 1000
+  test_interval: 1000
+  out_dir: output/manhattan
+  init_from: scratch
+  wandb_project: manhattan
+  compile: true
+  save_last_checkpoint: True
+  always_save_checkpoint: false
+  save_recovery_checkpoint: -1
+  experiment_name: BST
+data:
+  dataset: manhattan
+  effective_batch_size: 256
+  gradient_accum_steps: 1
+  pair_accum_steps: 1
+  num_workers: 0
+  test_generalization: true
+  generalization_num_samples: 20
+  data_path: "data/manhattan/random_walks"
+  use_pretokenized: true
+
+model:
+  n_layer: 36
+  n_head: 20
+  n_embd: 1280
+  dropout: 0.0
+  bias: false
+  vocab_size: 0 #will be overwritten by datamodule
+  block_size: 256
+  context_length: 0
+  gpt_mode: next_token
+  bst_pair_minimum_gap: 2
+  bst_single_gap_prediction_mode: eos
+
+optimizer:
+  optimizer_type: adam
+  learning_rate: 0.0001
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: null
+
+lr_scheduler:
+  warmup_iters: 0
+  warmdown_iters: 0
+seed: 1234

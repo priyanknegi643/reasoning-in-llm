@@ -1,0 +1,60 @@
+use_mtp_jtp: true
+
+trainer:
+  epochs: -1
+  train_batches: 20000
+  val_batches: 200
+  test_batches: 200
+  val_only: false
+  val_printsamples: false
+  log_interval: 1
+  val_interval: 1000
+  test_interval: 1000
+  out_dir: output/stargraph
+  init_from: scratch
+  wandb_project: "stargraph"
+  compile: true
+  save_last_checkpoint: false
+  save_best_checkpoint: false
+  experiment_name: JTP
+  wandb_tags: ["2_10"]
+data:
+  dataset: stargraph
+  effective_batch_size: 512
+  gradient_accum_steps: 1
+  pair_accum_steps: 1
+  num_workers: 0
+  stargraph_train_data_path: "data/stargraph/graph_2_10_sample_200000.txt"
+  stargraph_test_data_path: "data/stargraph/graph_2_10_test_20000.txt"
+  stargraph_max_nodes: 100
+  test_generalization: false
+  stargraph_generalization_data_path: ["data/stargraph/graph_7_5_sample_20000.txt", "data/stargraph/graph_5_5_test_20000.txt", "data/stargraph/graph_10_5_sample_1000000.txt", "data/stargraph/graph_6_6_sample_1000000.txt", "data/stargraph/graph_7_7_test_20000.txt"]
+
+model:
+  n_layer: 12
+  n_head: 6
+  n_embd: 384
+  dropout: 0.0
+  bias: false
+  vocab_size: 0 #will be overwritten by datamodule
+  block_size: 1024
+  context_length: 0
+  gpt_mode: next_token
+  mtp_horizon: 8
+  mtp_lambda: 1.0
+
+optimizer:
+  optimizer_type: adam
+  learning_rate: 5e-4
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: 100
+
+lr_scheduler:
+  warmup_iters: 0
+  warmdown_iters: 0
+sweep:
+  - seed: [1234, 1235, 1236, 1237, 1238]
+    model:
+      mtp_horizon: [8]

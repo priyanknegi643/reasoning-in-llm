@@ -1,0 +1,68 @@
+use_mtp_gloeckle: true
+
+trainer:
+  train_batches: 20000
+  val_batches: -1
+  val_only: false
+  val_printsamples: false
+  log_interval: 10
+  val_interval: 1000
+  test_interval: 1000
+  save_last_checkpoint: true
+  save_best_checkpoint: true
+  always_save_checkpoint: false
+  save_recovery_checkpoint: -1
+  keep_checkpoint_steps: []
+  out_dir: output/bst-tinystories-probe
+  init_from: scratch
+  log_to_file: true
+  log_to_wandb: true
+  wandb_project: bst-tinystories-probe
+  compile: true
+  use_fused_kernels: false
+  garbage_collect: -1
+  sampling_mode: AR
+  experiment_name: MTP
+  train_probe: true
+  probe_depth: 20
+data:
+  dataset: tinystories
+  effective_batch_size: 256
+  gradient_accum_steps: 1
+  pair_batch_size: 32768
+  num_workers: 0
+  pretokenized_data_path: ''
+  pretokenized_train_data: []
+  pretokenized_val_data: []
+  tokenizer_name_or_path: ''
+  tokenizer_eos_id: -1
+  stargraph_data_path: ''
+  stargraph_max_nodes: 50
+  device_batch_size: 256
+  micro_batch_size: 256
+model:
+  n_layer: 8
+  n_head: 8
+  n_embd: 768
+  dropout: 0.0
+  bias: false
+  vocab_size: 1000
+  block_size: 256
+  context_length: 0
+  bst_pair_minimum_gap: 1
+  bst_pair_maximum_gap: -1
+  bst_pair_subsample_rate: 1.0
+  bst_single_gap_prediction_mode: eos
+  gpt_mode: next_token
+  mtp_horizon: 8
+  mtp_lambda: 1.0
+optimizer:
+  learning_rate: 0.0003
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: 1.0
+lr_scheduler:
+  warmup_iters: 0
+  warmdown_iters: 0
+seed: 1234

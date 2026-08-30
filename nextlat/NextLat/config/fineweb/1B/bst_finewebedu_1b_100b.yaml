@@ -1,0 +1,73 @@
+use_bst: true
+
+trainer:
+  # 100B tokens / (512 seq * 1024 tokens) = 190,734.86 updates
+  train_batches: 190734
+  val_batches: 20
+  val_only: false
+  val_printsamples: false
+  log_interval: 10
+  val_interval: 2000
+  test_interval: 5000
+  save_last_checkpoint: false
+  save_best_checkpoint: false
+  always_save_checkpoint: false
+  save_recovery_checkpoint: -1
+  keep_checkpoint_steps: [40000, 80000, 120000, 160000, 190735]
+  out_dir: output/nextlat-finewebedu
+  init_from: scratch
+  log_to_file: true
+  log_to_wandb: true
+  wandb_project: fineweb
+  compile: true
+  use_fused_kernels: false
+  garbage_collect: -1
+  print_samples: false
+  sampling_mode: AR
+  experiment_name: BST-1B
+
+data:
+  # Read FineWeb-Edu from persistent volume mount.
+  dataset: finewebedu
+  # 0.5M tokens per update => 1024 * 1024 = 1M tokens
+  effective_batch_size: 512
+  gradient_accum_steps: 4
+  pair_batch_size: 32768
+  num_workers: 0
+  # prepare_finewebedu_pvc.sh downloads to ${DATA_ROOT}/datasets/fineweb.
+  # This path may contain parquet shards (download script) or bin shards.
+  fineweb_data_path: "data/fineweb/pretokenized-100BT"
+  # If set larger than available, datamodule uses all discovered files.
+  num_train_files: 1000
+
+model:
+  # 1.3B-class GPT configuration
+  n_layer: 22
+  n_head: 16
+  n_embd: 2048
+  dropout: 0.0
+  bias: false
+  vocab_size: 0 # overwritten by datamodule tokenizer
+  block_size: 1024
+  context_length: 0
+  bst_pair_minimum_gap: 1
+  bst_pair_maximum_gap: -1
+  bst_pair_subsample_rate: 0.01
+  bst_single_gap_prediction_mode: eos
+  gpt_mode: next_token
+
+optimizer:
+  learning_rate: 4e-4
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: 1.0
+
+lr_scheduler:
+  schedule: wsd
+  # 1B warmup tokens / 524,288 tokens per update = 1907.35 -> ceil = 1908
+  warmup_iters: 1908
+  # warmdown over last 10B tokens
+  warmdown_iters: 19073
+
+seed: 1234
