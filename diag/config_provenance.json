@@ -1,0 +1,45 @@
+{
+  "status": "ok",
+  "stages": [
+    {
+      "stage": "defaults + source YAML",
+      "config_path": "nextlat/NextLat/config/stargraph/2_10/nextlat_stargraph_2_10_ckpt.yaml",
+      "struct_mode": null,
+      "observed": {
+        "temperature": "1.0",
+        "top_k": "None",
+        "sampling_mode": "'AR'",
+        "speculative_gamma": "4",
+        "compile": "True"
+      },
+      "keys_present_in_trainer": {
+        "temperature": false,
+        "top_k": false,
+        "compile": true
+      }
+    },
+    {
+      "stage": "defaults + materialized_config.yaml",
+      "config_path": "nextlat/NextLat/output/stargraph/NextLat-proj_factor0.5_lambda_kl1.0_mtp_horizon8_seed1234_lambda_mse1.0/materialized_config.yaml",
+      "struct_mode": null,
+      "observed": {
+        "temperature": "1.0",
+        "top_k": "None",
+        "sampling_mode": "'AR'",
+        "speculative_gamma": "4",
+        "compile": "False"
+      },
+      "keys_present_in_trainer": {
+        "temperature": false,
+        "top_k": false,
+        "compile": true
+      }
+    }
+  ],
+  "cli_overrides": [],
+  "notes": [
+    "temperature/top_k are absent from both defaults.yaml and the 2_10 configs; the values above are what the evaluator's getattr() defaults resolve to under the repository's own merge.",
+    "SEED vs RNG STATE: a seed starts a sequence; ~20000 training steps consume it. The RNG state in force at any historical evaluation is UNKNOWN and is not recoverable from these files. Only the new smoke-test seed is controlled.",
+    "The compile discrepancy (true in source YAML, false materialized) is why all stages are recorded separately rather than collapsed into one."
+  ]
+}
