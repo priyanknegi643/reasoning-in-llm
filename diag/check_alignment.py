@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 # This script lives in /home/shivaanshgusain/Research/
 # The NextLat repo is at /home/shivaanshgusain/Research/Reasoning/nextlat/NextLat
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-REASONING = os.path.join(SCRIPT_DIR, "Reasoning")
+REASONING = os.path.join(SCRIPT_DIR)
 NEXTLAT = os.path.join(REASONING, "nextlat", "NextLat")
 DIAG_DIR = os.path.join(REASONING, "diag")
 DEFAULT_RUN = "NextLat-proj_factor0.5_lambda_kl1.0_mtp_horizon8_seed1234_lambda_mse1.0"
