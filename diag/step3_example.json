@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-09-17T23:47:57.136618+00:00",
-  "checkpoint_path": "/workspace/Research/nextlat/NextLat/output/stargraph/NextLat-proj_factor0.5_lambda_kl1.0_mtp_horizon8_seed1234_lambda_mse1.0/ckpt_iter_20001_0.7224.pt",
+  "generated_utc": "2026-09-18T03:12:11.080652+00:00",
+  "checkpoint_path": "/workspace/Research/nextlat/NextLat/output/stargraph/NextLat-proj_factor0.5_lambda_kl1.0_mtp_horizon8_seed1234_lambda_mse1.0/ckpt_iter_5000_0.6055.pt",
   "config_path": "/workspace/Research/nextlat/NextLat/output/stargraph/NextLat-proj_factor0.5_lambda_kl1.0_mtp_horizon8_seed1234_lambda_mse1.0/materialized_config.yaml",
   "cwd_for_run": "/workspace/Research/nextlat/NextLat",
   "environment": {
@@ -49,8 +49,8 @@
     "note": "Recorded from the return value of load_state_dict during the native load. strict was passed through unchanged; no second load was performed."
   },
   "training_steps": {
-    "restored_from_checkpoint": 20001,
-    "filename_iteration": 20001,
+    "restored_from_checkpoint": 5000,
+    "filename_iteration": 5000,
     "match": true
   },
   "placement": {

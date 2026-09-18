@@ -1,0 +1,54 @@
+{
+  "generated_utc": "2026-09-18T03:11:57.692157+00:00",
+  "checkpoint": "ckpt_iter_20001_0.7224.pt",
+  "checkpoint_iter": 20001,
+  "config_path": "/workspace/Research/nextlat/NextLat/output/stargraph/NextLat-proj_factor0.5_lambda_kl1.0_mtp_horizon8_seed1234_lambda_mse1.0/materialized_config.yaml",
+  "batch_shape": [
+    4,
+    68
+  ],
+  "eos_token_id_used": 104,
+  "k1_mse": 0.02293056808412075,
+  "k2_mse": 0.030418451875448227,
+  "k1_mse_first_few_positions": [
+    0.00021920978906564415,
+    0.0006557758897542953,
+    0.0008570398204028606,
+    0.0006182467332109809,
+    0.000343384628649801
+  ],
+  "k2_mse_first_few_positions": [
+    0.0006739078089594841,
+    0.0009977099252864718,
+    0.001520560821518302,
+    0.000992580782622099,
+    0.0005216286517679691
+  ],
+  "shapes": {
+    "pred_1": [
+      4,
+      67,
+      384
+    ],
+    "target_1": [
+      4,
+      67,
+      384
+    ],
+    "pred_2": [
+      4,
+      66,
+      384
+    ],
+    "target_2": [
+      4,
+      66,
+      384
+    ]
+  },
+  "eos_masked_positions_k1": 0,
+  "eos_masked_positions_k2": 0,
+  "pred_over_h_norm_ratio": 0.9928041100502014,
+  "concat_order_assumed": "dynamics_model(h_t, next_token_embedding) -- NOT independently verified against source; re-check against the actual NextLatDynamicsModel.forward signature if this script's k1_mse diverges sharply from the training log's mse_loss at a comparable step.",
+  "note": "k1_mse here is computed on a fresh val batch at inference time and is NOT expected to exactly match the training log's mse_loss at step 20000 (different batch, no dropout randomness during eval, etc.) -- compare ORDER OF MAGNITUDE and trend, not exact equality. A large discrepancy (>1 order of magnitude) is the actual alignment-bug signal to look for."
+}

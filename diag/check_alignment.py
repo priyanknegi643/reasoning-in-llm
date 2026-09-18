@@ -28,12 +28,12 @@ import re
 import sys
 from datetime import datetime, timezone
 
-# This script lives in /home/shivaanshgusain/Research/
-# The NextLat repo is at /home/shivaanshgusain/Research/Reasoning/nextlat/NextLat
+# This script lives in /workspace/Research/diag/
+# The NextLat repo is at /workspace/Research/nextlat/NextLat
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-REASONING = os.path.join(SCRIPT_DIR)
-NEXTLAT = os.path.join(REASONING, "nextlat", "NextLat")
-DIAG_DIR = os.path.join(REASONING, "diag")
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)  # /workspace/Research
+NEXTLAT = os.path.join(PROJECT_ROOT, "nextlat", "NextLat")
+DIAG_DIR = os.path.join(PROJECT_ROOT, "diag")
 DEFAULT_RUN = "NextLat-proj_factor0.5_lambda_kl1.0_mtp_horizon8_seed1234_lambda_mse1.0"
 
 CKPT_ITER_RE = re.compile(r"ckpt_iter_(\d+)(?:_([0-9.]+))?\.pt$")
@@ -54,23 +54,33 @@ def parse_args():
 
 
 def resolve_paths(args):
-    if os.path.isabs(args.checkpoint) and os.path.isfile(args.checkpoint):
-        ckpt_path = args.checkpoint
+    # First try the path as-is (relative to CWD or absolute)
+    if os.path.isfile(args.checkpoint):
+        ckpt_path = os.path.abspath(args.checkpoint)
         run_dir_path = os.path.dirname(ckpt_path)
+    elif os.path.isabs(args.checkpoint):
+        # Absolute path but doesn't exist
+        sys.exit(f"Checkpoint not found: {args.checkpoint}")
     else:
+        # Relative path that doesn't exist as-is, try relative to NEXTLAT
         run_dir_path = os.path.join(NEXTLAT, "output", "stargraph", args.run_dir)
         ckpt_path = os.path.join(run_dir_path, args.checkpoint)
-    if not os.path.isfile(ckpt_path):
-        sys.exit(f"Checkpoint not found: {ckpt_path}")
+        if not os.path.isfile(ckpt_path):
+            sys.exit(f"Checkpoint not found: {ckpt_path}")
+
     cfg_path = args.config or os.path.join(run_dir_path, "materialized_config.yaml")
     if not os.path.isfile(cfg_path):
         sys.exit(f"Config not found: {cfg_path}")
+
     return ckpt_path, cfg_path
 
 
 def main():
     args = parse_args()
     ckpt_path, cfg_path = resolve_paths(args)
+
+    # Resolve output path to absolute BEFORE chdir
+    out_path = os.path.abspath(args.out)
 
     os.chdir(NEXTLAT)
     sys.path.insert(0, NEXTLAT)
@@ -204,9 +214,9 @@ def main():
         ),
     }
 
-    with open(args.out, "w") as f:
+    with open(out_path, "w") as f:
         json.dump(result, f, indent=2)
-    print(f"k1_mse={k1_mse_mean}  k2_mse={k2_mse_mean}  -> {args.out}")
+    print(f"k1_mse={k1_mse_mean}  k2_mse={k2_mse_mean}  -> {out_path}")
 
 
 if __name__ == "__main__":

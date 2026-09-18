@@ -30,8 +30,8 @@ import sys
 from datetime import datetime, timezone
 
 DIAG_DIR = os.path.dirname(os.path.abspath(__file__))
-REASONING = os.path.dirname(DIAG_DIR)
-NEXTLAT = os.path.join(REASONING, "nextlat", "NextLat")
+PROJECT_ROOT = os.path.dirname(DIAG_DIR)  # /workspace/Research
+NEXTLAT = os.path.join(PROJECT_ROOT, "nextlat", "NextLat")
 DEFAULT_RUN = "NextLat-proj_factor0.5_lambda_kl1.0_mtp_horizon8_seed1234_lambda_mse1.0"
 
 CKPT_ITER_RE = re.compile(r"ckpt_iter_(\d+)(?:_([0-9.]+))?\.pt$")
@@ -71,15 +71,19 @@ def main():
     args = parse_args()
 
     # ---- resolve every path to an absolute path BEFORE changing directory ----
-    run_dir = os.path.join(NEXTLAT, "output", "stargraph", args.run_dir)
-    ckpt_path = (
-        args.checkpoint
-        if os.path.isabs(args.checkpoint)
-        else os.path.join(run_dir, args.checkpoint)
-    )
-    ckpt_path = os.path.abspath(ckpt_path)
+    if os.path.isfile(args.checkpoint):
+        ckpt_path = os.path.abspath(args.checkpoint)
+        run_dir = os.path.dirname(ckpt_path)
+    elif os.path.isabs(args.checkpoint):
+        sys.exit(f"Checkpoint not found: {args.checkpoint}")
+    else:
+        run_dir = os.path.join(NEXTLAT, "output", "stargraph", args.run_dir)
+        ckpt_path = os.path.join(run_dir, args.checkpoint)
+        if not os.path.isfile(ckpt_path):
+            sys.exit(f"Checkpoint not found: {ckpt_path}")
+
     cfg_path = os.path.abspath(
-        args.config or os.path.join(os.path.dirname(ckpt_path), "materialized_config.yaml")
+        args.config or os.path.join(run_dir, "materialized_config.yaml")
     )
     out_path = os.path.abspath(args.out)
     indices_path = os.path.join(DIAG_DIR, "diagnostic_indices.json")
